@@ -42,8 +42,7 @@ def bininfoset(adata, supervised, k=5):
         return pr.markers.SparseInformationSet(binx)
 
 
-def get_mi_markers_func(obj, pp, num_feats=100, supervised=True, cb=nullcb):
-    assert pp == "quantile"
+def get_mi_markers_func(obj, num_features=100, supervised=True, cb=nullcb):
     infosetfunc = bininfoset
 
     def select_markers(adata):
@@ -72,15 +71,14 @@ def get_mi_markers_func(obj, pp, num_feats=100, supervised=True, cb=nullcb):
         if supervised:
             infoset.set_y(adata.obs["y"].values)
         featsel = obj(infoset)
-        featsel.autoselect(num_feats)
+        featsel.autoselect(num_features)
         cb("selected")
         return pool[featsel.S]
 
     return select_markers
 
 
-def get_binmi_markers_func(obj, pp, num_feats=10, cb=nullcb):
-    assert pp == "quantile"
+def get_binmi_markers_func(obj, num_features=10, cb=nullcb):
     infosetfunc = bininfoset
 
     def select_markers(adata):
@@ -107,7 +105,7 @@ def get_binmi_markers_func(obj, pp, num_feats=10, cb=nullcb):
                 binx[:, pool], adata.obs["y"].values
             )
             featsel = obj(infoset)
-            featsel.autoselect(num_feats)
+            featsel.autoselect(num_features)
             cb("some_selected")
             markers.append(pool[featsel.S].tolist())
         cb("selected")
@@ -116,7 +114,7 @@ def get_binmi_markers_func(obj, pp, num_feats=10, cb=nullcb):
     return select_markers
 
 
-def get_markers_func(method="t-test_overestim_var", n_markers=100, cb=nullcb):
+def get_markers_func(method="t-test_overestim_var", num_features=100, cb=nullcb):
     def select_markers(adata):
         adata = adata.copy()
         cb("start")
@@ -130,7 +128,7 @@ def get_markers_func(method="t-test_overestim_var", n_markers=100, cb=nullcb):
             [
                 adata.var_names.get_loc(gene)
                 for gene in adata.uns["rank_genes_groups"]["names"][cat].tolist()[
-                    :n_markers
+                    :num_features
                 ]
             ]
             for cat in adata.obs["clust"].cat.categories
@@ -139,7 +137,7 @@ def get_markers_func(method="t-test_overestim_var", n_markers=100, cb=nullcb):
     return select_markers
 
 
-def get_rfc_markers_func(n_estimators=1000, n_markers=1000, cb=nullcb):
+def get_rfc_markers_func(n_estimators=100, num_features=1000, cb=nullcb):
     def select_markers(adata):
         adata = adata.copy()
         cb("start")
@@ -151,6 +149,6 @@ def get_rfc_markers_func(n_estimators=1000, n_markers=1000, cb=nullcb):
         rfc.fit(adata.X, adata.obs["y"].values)
         cb("selected")
         importances = rfc.feature_importances_
-        return importances.argsort()[::-1][:n_markers]
+        return importances.argsort()[::-1][:num_features]
 
     return select_markers

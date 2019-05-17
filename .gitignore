@@ -1,0 +1,7 @@
+data/*/*.gz
+data/*/*.txt
+data/*/*.h5ad
+data/*/*.tsv
+data/zheng/filtered_matrices_mex/
+data/paul15/
+__pycache__/

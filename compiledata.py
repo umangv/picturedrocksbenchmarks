@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import click
 import numpy as np
 import pandas as pd
@@ -8,11 +10,11 @@ from anndata import AnnData
 
 
 @click.group(chain=True)
-def home():
+def main():
     """Compile data from various formats into AnnData HDF5 files"""
     pass
 
-@home.command()
+@main.command()
 def zheng():
     """Prepare the Zheng dataset
     
@@ -29,7 +31,7 @@ def zheng():
     ft.savefolds("output/pbmc68k_folds.npz")
 
 
-@home.command()
+@main.command()
 def paul():
     """Prepare the Paul dataset
 
@@ -46,7 +48,7 @@ def paul():
     ft.savefolds("output/paul_folds.npz")
 
 
-@home.command()
+@main.command()
 def green():
     """Prepare the Green dataset
 
@@ -68,7 +70,7 @@ def green():
     )
     sc.write("data/green/green.h5ad", adata)
 
-@home.command()
+@main.command()
 def zeisel():
     """Prepare Zeisel dataset
 
@@ -106,4 +108,4 @@ def zeisel():
     ft.savefolds("output/zeisel_folds.npz")
 
 if __name__ == "__main__":
-    home()
+    main()
