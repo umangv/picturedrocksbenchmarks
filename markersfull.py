@@ -40,8 +40,6 @@ def main(dataset, method, pp, n_markers):
         output = get_mi_markers_func(micls[method], pp, n_markers,
                 cb=_recordtime)(adata)
     elif method == "rfc":
-        output = get_rfc_markers_func(1000, cb=_recordtime)(adata)
-    elif method == "rfc100":
         output = get_rfc_markers_func(100, cb=_recordtime)(adata)
     elif method.startswith("bin"):
         bmethod = method[3:]

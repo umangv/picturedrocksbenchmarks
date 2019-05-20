@@ -115,7 +115,7 @@ def main(dataset, method, pp, classifier):
         "binmim",
     ]
     # multiclass methods
-    mcmethods = ["cife", "jmi", "mim", "rfc", "rfc100"]
+    mcmethods = ["cife", "jmi", "mim", "rfc"]
     classifier_cls = {"nc": NearestCentroidClassifier, "rf": RandomForestClassifier}[
         classifier
     ]

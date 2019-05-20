@@ -39,7 +39,7 @@ def main(dataset, method, num_features):
     elif method in mimethods:
         ft.selectmarkers(get_mi_markers_func(micls[method], num_features))
         ft.savefoldsandmarkers(f"output/{dataset}_{method}.npz")
-    elif method == "rfc100":
+    elif method == "rfc":
         ft.selectmarkers(get_rfc_markers_func(100, num_features))
         ft.savefoldsandmarkers(f"output/{dataset}_{method}.npz")
     elif method.startswith("bin"):
