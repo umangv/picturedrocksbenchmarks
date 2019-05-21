@@ -20,22 +20,6 @@ from getdata import getdata
 
 _toarray = pr.performance._toarray
 
-issparse = scipy.sparse.issparse
-
-
-def normalize_per_cell(data, counts_per_cell_after=None, copy=False, *args, **kwargs):
-    data = data.copy() if copy else data
-    counts_per_cell = _toarray(data.X.sum(axis=1)).ravel()
-    if counts_per_cell_after is None:
-        counts_per_cell_after = np.median(counts_per_cell)
-    counts_per_cell /= counts_per_cell_after
-    counts_per_cell += (counts_per_cell == 0).astype(int)
-    if not issparse(data.X):
-        data.X /= counts_per_cell[:, np.newaxis]
-    else:
-        sparsefuncs.inplace_row_scale(data.X, 1 / counts_per_cell)
-    return data if copy else None
-
 
 class NearestCentroidClassifier:
     """Nearest Centroid Classifier for Cross Validation
@@ -51,6 +35,7 @@ class NearestCentroidClassifier:
     def train(self, adata):
         adata = adata.copy()
         adata.X = _toarray(adata.X)
+        sc.pp.normalize_per_cell(adata, 1000, min_counts=0)
         sc.pp.log1p(adata)
         sc.pp.pca(adata, 30)
         self.pcs = adata.varm["PCs"]
@@ -65,6 +50,7 @@ class NearestCentroidClassifier:
 
     def test(self, Xtest):
         testdata = AnnData(_toarray(Xtest))
+        sc.pp.normalize_per_cell(adata, 1000, min_counts=0)
         sc.pp.log1p(testdata)
         X = _toarray(testdata.X)
         X = X @ self.pcs
@@ -99,9 +85,8 @@ ErrorRates = namedtuple("ErrorRates", ["method", "n_markers", "error_rate"])
 @click.command()
 @click.argument("dataset")
 @click.argument("method")
-@click.argument("pp")
 @click.argument("classifier")
-def main(dataset, method, pp, classifier):
+def main(dataset, method, classifier):
     print(f"Classifying {dataset} based on markers from {method}")
     adata = getdata(dataset)
     ft = pr.performance.FoldTester(adata)
@@ -120,7 +105,7 @@ def main(dataset, method, pp, classifier):
         classifier
     ]
 
-    filename = f"../output/{dataset}_{method}_{pp}.npz"
+    filename = f"../output/{dataset}_{method}.npz"
     n_markers = []
     errorrate = []
     ft = pr.performance.FoldTester(adata)
@@ -145,9 +130,9 @@ def main(dataset, method, pp, classifier):
         raise ValueError("No such method")
     pickle.dump(
         ErrorRates(method, n_markers, errorrate),
-        open(f"../output/{dataset}_{method}_{pp}_{classifier}_error.pkl", "wb"),
+        open(f"../output/{dataset}_{method}_{classifier}_error.pkl", "wb"),
     )
-    print(f"Output written to ../output/{dataset}_{method}_{pp}_{classifier}_error.pkl")
+    print(f"Output written to ../output/{dataset}_{method}_{classifier}_error.pkl")
 
 
 if __name__ == "__main__":
