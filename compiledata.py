@@ -28,7 +28,7 @@ def zheng():
     sc.write("data/zheng/fresh_68k_bulk_labels.h5ad", pbmc_68k)
     ft = pr.performance.FoldTester(pbmc_68k)
     ft.makefolds(random=True)
-    ft.savefolds("output/pbmc68k_folds.npz")
+    ft.savefolds("output/zheng_folds.npz")
 
 
 @main.command()
@@ -69,6 +69,10 @@ def green():
         df, how="left", left_index=True, right_index=True, validate="1:1"
     )
     sc.write("data/green/green.h5ad", adata)
+    pr.performance.process_clusts(adata, "CellType")
+    ft = pr.performance.FoldTester(adata)
+    ft.makefolds(random=True)
+    ft.savefolds("output/green_folds.npz")
 
 @main.command()
 def zeisel():
