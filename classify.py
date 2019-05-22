@@ -50,7 +50,7 @@ class NearestCentroidClassifier:
 
     def test(self, Xtest):
         testdata = AnnData(_toarray(Xtest))
-        sc.pp.normalize_per_cell(adata, 1000, min_counts=0)
+        sc.pp.normalize_per_cell(testdata, 1000, min_counts=0)
         sc.pp.log1p(testdata)
         X = _toarray(testdata.X)
         X = X @ self.pcs
@@ -105,7 +105,7 @@ def main(dataset, method, classifier):
         classifier
     ]
 
-    filename = f"../output/{dataset}_{method}.npz"
+    filename = f"output/{dataset}_{method}.npz"
     n_markers = []
     errorrate = []
     ft = pr.performance.FoldTester(adata)
@@ -130,9 +130,9 @@ def main(dataset, method, classifier):
         raise ValueError("No such method")
     pickle.dump(
         ErrorRates(method, n_markers, errorrate),
-        open(f"../output/{dataset}_{method}_{classifier}_error.pkl", "wb"),
+        open(f"output/{dataset}_{method}_{classifier}_error.pkl", "wb"),
     )
-    print(f"Output written to ../output/{dataset}_{method}_{classifier}_error.pkl")
+    print(f"Output written to output/{dataset}_{method}_{classifier}_error.pkl")
 
 
 if __name__ == "__main__":
