@@ -12,7 +12,7 @@ clean:
 	-rm *.log *.aux *.synctex.gz
 	-rm *.pdf
 
-errors.csv:
+errors.csv: ../../output/errors.csv
 	cp ../../output/errors.csv .
 
 %.pdf : %.tex fig_errors.tex errors.csv
