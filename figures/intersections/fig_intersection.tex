@@ -1,0 +1,35 @@
+\documentclass[varwidth=170mm]{standalone}
+
+\usepackage[table]{xcolor}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\pgfplotsset{histplot/.style={ybar interval, draw=none, fill=black}}
+\pgfplotsset{histaxes/.style={area style, mark=no, ylabel={Entries per unit information}}, width=0.9\linewidth, ymode={log}, log origin=0}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{colorbrewer}
+
+
+\usepackage{pgfplotstable}
+% make highlighted tables
+% most of this is from https://tex.stackexchange.com/a/42447/21027
+\pgfplotstableset{
+    color cells/.style={
+        col sep=comma,
+        string type,
+        postproc cell content/.code={%
+          \pgfkeysalso{@cell content=\rule{0cm}{2.4ex}\pgfmathtruncatemacro\ucellval{min(100,##1)}\xdef\ucellval{\ucellval}\cellcolor{black!\ucellval}\ifnum\ucellval>50\color{white}\fi##1}%
+                },
+        columns/0/.style={
+            column name={},
+            postproc cell content/.code={},
+        }
+    },
+    intersectiontable/.style={color cells,header=has colnames}
+}
+
+\usepackage{tabularx}
+\renewcommand\tabularxcolumn[1]{m{#1}}% for vertical centering text in X column
+
+\begin{document}
