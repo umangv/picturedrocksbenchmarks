@@ -2,6 +2,7 @@ import numpy as np
 import scipy.sparse
 import scanpy.api as sc
 import picturedrocks as pr
+from picturedrocks.markers.mutualinformation.infoset import quantile_discretize
 
 from sklearn.ensemble import RandomForestClassifier
 
@@ -11,45 +12,12 @@ def nullcb(*args, **kwargs):
     pass
 
 
-def kbins_discretize(x, k):
-    x_is_sparse = scipy.sparse.issparse(x)
-    n_obs, n_features = x.shape
-    if x_is_sparse:
-        x = x.toarray()
-    newx = np.zeros(x.shape, dtype=int)
-    for j in range(n_features):
-        col = x[:, j]
-        origcol = col
-        bins = []
-        cmax = col.max()
-        for i in range(k - 1):
-            if bins:
-                m = bins[-1]
-                col = col[col > m]
-                if cmax <= m or len(col) == 0:
-                    break
-            bins.append(np.percentile(col, 100 / (k - i)))
-        newcol = np.digitize(origcol, bins, right=True)
-        newx[:, j] = newcol
-    return newx
-
-
-def bininfoset(adata, supervised, k=5):
-    binx = kbins_discretize(adata.X, k)
-    if supervised:
-        return pr.markers.SparseInformationSet(binx, adata.obs["y"].values)
-    else:
-        return pr.markers.SparseInformationSet(binx)
-
-
 def get_mi_markers_func(obj, num_features=100, supervised=True, cb=nullcb):
-    infosetfunc = bininfoset
-
     def select_markers(adata):
         adata = adata.copy()
         pr.read.process_clusts(adata)
         cb("start")
-        binx = kbins_discretize(adata.X, 5)
+        binx = quantile_discretize(adata.X, 5)
         cb("discretized")
         binx = scipy.sparse.csc_matrix(binx)
         cb("sparsified")
@@ -79,13 +47,11 @@ def get_mi_markers_func(obj, num_features=100, supervised=True, cb=nullcb):
 
 
 def get_binmi_markers_func(obj, num_features=10, cb=nullcb):
-    infosetfunc = bininfoset
-
     def select_markers(adata):
         adata = adata.copy()
         pr.read.process_clusts(adata)
         cb("start")
-        binx = kbins_discretize(adata.X, 5)
+        binx = quantile_discretize(adata.X, 5)
         cb("discretized")
         binx = scipy.sparse.csc_matrix(binx)
         tempinfoset = pr.markers.SparseInformationSet(binx)

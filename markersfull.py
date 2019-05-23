@@ -18,16 +18,16 @@ def _recordtime(name):
     timepointnames.append(name)
     timepoints.append(time.time())
 
+
 ErrorRates = namedtuple("ErrorRates", ["method", "n_markers", "error_rate"])
 
 
 @click.command()
 @click.argument("dataset")
 @click.argument("method")
-@click.argument("pp")
 @click.argument("n_markers", type=int)
-def main(dataset, method, pp, n_markers):
-    print(f"Selecting {n_markers} markers in {dataset} using {method} and {pp} preprocessing")
+def main(dataset, method, n_markers):
+    print(f"Selecting {n_markers} markers in {dataset} using {method}")
     adata = getdata(dataset)
 
     demethods = ["t-test_overestim_var", "wilcoxon", "logreg"]
@@ -37,18 +37,18 @@ def main(dataset, method, pp, n_markers):
     if method in demethods:
         output = get_markers_func(method, n_markers, cb=_recordtime)(adata)
     elif method in mimethods:
-        output = get_mi_markers_func(micls[method], pp, n_markers,
-                cb=_recordtime)(adata)
+        output = get_mi_markers_func(micls[method], n_markers, cb=_recordtime)(adata)
     elif method == "rfc":
         output = get_rfc_markers_func(100, cb=_recordtime)(adata)
     elif method.startswith("bin"):
         bmethod = method[3:]
-        output = get_binmi_markers_func(micls[bmethod], pp, n_markers,
-                cb=_recordtime)(adata)
+        output = get_binmi_markers_func(micls[bmethod], n_markers, cb=_recordtime)(
+            adata
+        )
     else:
         raise ValueError("Unknown method")
     np.savez(
-        f"../output/{dataset}_{method}_{pp}_markers_full.npz",
+        f"output/{dataset}_{method}_markers_full.npz",
         markers=output,
         timepoints=timepoints,
         timepointnames=timepointnames,
