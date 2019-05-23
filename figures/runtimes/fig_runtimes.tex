@@ -1,0 +1,89 @@
+\documentclass[varwidth=85mm]{standalone}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\pgfplotsset{histplot/.style={ybar interval, draw=none, fill=black}}
+\pgfplotsset{histaxes/.style={area style, mark=no, ylabel={Entries per unit information}}, width=0.9\linewidth, ymode={log}, log origin=0}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{colorbrewer}
+
+\pgfplotsset{
+  runtimebars/.style={ybar=0pt,
+      xmin=el, xmax=er,
+      xtick=data,
+      height=5cm,
+      width=80mm,
+      bar width=1.5mm,
+      ylabel={Run time (s)},
+    },
+  binary/.style={
+    color=black,
+    postaction={
+        pattern=north east lines
+      }},
+  rtlogreg/.style={fill=Set1-A},
+  rtttest/.style={fill=Set1-B},
+  rtwilcoxon/.style={fill=Set1-C},
+  rtrfc/.style={fill=Set1-D},
+  rtcife/.style={fill=Set1-E},
+  rtjmi/.style={fill=Set1-H},
+  rtmim/.style={fill=Set1-G},
+  rtbincife/.style={binary,fill=Set1-E}, 
+  rtbinjmi/.style={binary,fill=Set1-H},
+  rtbinmim/.style={binary,fill=Set1-G},
+}
+
+\begin{document}
+\begin{tikzpicture}
+  \begin{axis}[runtimebars,
+      symbolic x coords={el,paul,zeisel, er},
+      xticklabels={Paul,Zeisel},
+      legend columns=5,
+      legend style={
+        nodes={scale=0.7, transform shape},
+        at={(0.5,1.3)}, anchor=north
+      },
+      tick pos=left
+    ]
+    \addplot[rtlogreg] table[x=dataset,y=logreg,col sep=comma]{runtimes.csv};
+    \addlegendentry{LogReg}
+    \addplot[rtttest] table[x=dataset,y=t-test_overestim_var,col sep=comma]{runtimes.csv};
+    \addlegendentry{$t$-Test}
+    \addplot[rtwilcoxon] table[x=dataset,y=wilcoxon,col sep=comma]{runtimes.csv};
+    \addlegendentry{Wilcoxon}
+    \addplot[rtrfc] table[x=dataset,y=rfc,col sep=comma]{runtimes.csv};
+    \addlegendentry{RForests}
+    \addplot[rtcife] table[x=dataset,y=cife,col sep=comma]{runtimes.csv};
+    \addlegendentry{CIFE}
+    \addplot[rtjmi] table[x=dataset,y=jmi,col sep=comma]{runtimes.csv};
+    \addlegendentry{JMI}
+    \addplot[rtmim] table[x=dataset,y=mim,col sep=comma]{runtimes.csv};
+    \addlegendentry{MIM}
+    \addplot[rtbincife] table[x=dataset,y=bincife,col sep=comma]{runtimes.csv};
+    \addlegendentry{CIFE(B)}
+    \addplot[rtbinjmi] table[x=dataset,y=binjmi,col sep=comma]{runtimes.csv};
+    \addlegendentry{JMI(B)}
+    \addplot[rtbinmim] table[x=dataset,y=binmim,col sep=comma]{runtimes.csv};
+    \addlegendentry{MIM(B)}
+  \end{axis}
+%\end{tikzpicture}
+%\begin{tikzpicture}
+  \begin{axis}[runtimebars,
+      symbolic x coords={el,green,zheng,er},
+      xticklabels={Green, Zheng},
+      yshift=-4.5cm
+    ]
+    \addplot[rtlogreg] table[x=dataset,y=logreg,col sep=comma]{runtimes2.csv};
+    \addplot[rtttest] table[x=dataset,y=t-test_overestim_var,col sep=comma]{runtimes2.csv};
+    \addplot[rtwilcoxon] table[x=dataset,y=wilcoxon,col sep=comma]{runtimes2.csv};
+    \addplot[rtrfc] table[x=dataset,y=rfc,col sep=comma]{runtimes2.csv};
+    \addplot[rtcife] table[x=dataset,y=cife,col sep=comma]{runtimes2.csv};
+    \addplot[rtjmi] table[x=dataset,y=jmi,col sep=comma]{runtimes2.csv};
+    \addplot[rtmim] table[x=dataset,y=mim,col sep=comma]{runtimes2.csv};
+    \addplot[rtbincife] table[x=dataset,y=bincife,col sep=comma]{runtimes2.csv};
+    \addplot[rtbinjmi] table[x=dataset,y=binjmi,col sep=comma]{runtimes2.csv};
+    \addplot[rtbinmim] table[x=dataset,y=binmim,col sep=comma]{runtimes2.csv};
+  \end{axis}
+\end{tikzpicture}
+\end{document}
