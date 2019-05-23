@@ -11,4 +11,5 @@ logs/
 *.log
 *.synctex.gz
 *.pdf
+*.png
 *.csv
