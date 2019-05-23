@@ -82,10 +82,27 @@ cd ../..
 ```
 
 #### Runtimes
-(Instructions will be posted soon)
+Runtimes are extracted from the `markers_full` files. They can be extracted at once with
+```bash
+python extractruntimes.py
+```
+
+This will generate `output/runtimes.csv` and `output/runtimes2.csv`. To generate the bar plots from these csv files, run `make` inside the `figures/runtimes` directory.
+
+```bash
+cd figures/runtimes
+make
+cd ../..
+```
 
 #### Dimensionality reduction
-(Instructions will be posted soon)
+To generate PCA/tSNE/UMAP plots of datasets with only a few features (10 features total for multiclass methods, 1 feature per class label for binary methods), use `dimred.py DATASET`.
+
+```bash
+python dimred.py green
+```
+
+This will generate all the combinations of PCA/tSNE/UMAP and PDF/PNG plots for features selected with various methods in the `figures/dimred` directory.
 
 #### Histograms of I(x_i; x_j; y)
 (Instructions will be posted soon)
