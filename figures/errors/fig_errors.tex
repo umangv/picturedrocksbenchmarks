@@ -1,0 +1,60 @@
+\documentclass[varwidth=170mm]{standalone}
+
+\usepackage{subfigure}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\pgfplotsset{histplot/.style={ybar interval, draw=none, fill=black}}
+\pgfplotsset{histaxes/.style={area style, mark=no, ylabel={Entries per unit information}}, width=0.9\linewidth, ymode={log}, log origin=0}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{colorbrewer}
+
+\begin{document}
+
+\pgfplotsset{
+  fsperform/.style={xlabel={number of features}, ylabel={reclassification error}, width=80mm, height=70mm,tick pos=left, yticklabel style={/pgf/number format/fixed},},
+  errortrace/.style={thick, mark options={solid}},
+  cife/.style={errortrace, color=Set1-E, mark=*},
+  jmi/.style={errortrace, color=Set1-H, mark=*},
+  mim/.style={errortrace, color=Set1-G, mark=*},
+  ttest/.style={errortrace, mark=o, color=Set1-B, dashed},
+  wilcoxon/.style={errortrace, color=Set1-C, dashed, mark=o},
+  logreg/.style={errortrace, color=Set1-A, dashed, mark=o},
+  rfc/.style={errortrace, color=Set1-D, dashed, mark=o}
+}
+
+\newcommand{\plotexperimenterrorslegend}[3][rf]{
+    \begin{tikzpicture}
+      \begin{axis}[fsperform,legend columns=1,legend style={nodes={scale=0.5, transform shape}}]
+        \addplot[cife] table [x={#2_#3cife_n}, y={#2_#3cife_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{CIFE};
+        \addplot[jmi] table [x={#2_#3jmi_n}, y={#2_#3jmi_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{JMI};
+        \addplot[mim] table [x={#2_#3mim_n}, y={#2_#3mim_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{MIM};
+        \addplot[ttest] table [x={#2_t-test_overestim_var_n}, y={#2_t-test_overestim_var_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{$t$-test};
+        \addplot[wilcoxon] table [x={#2_wilcoxon_n}, y={#2_wilcoxon_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{Wilcoxon};
+        \addplot[logreg] table [x={#2_logreg_n}, y={#2_logreg_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{Logistic Regression};
+        \addplot[rfc] table [x={#2_rfc_n}, y={#2_rfc_#1_error}, col sep=comma] {errors.csv};
+        \addlegendentry{Random Forests};
+      \end{axis}
+    \end{tikzpicture}%
+}
+\newcommand{\plotexperimenterrors}[3][rf]{
+    \begin{tikzpicture}
+      \begin{axis}[fsperform]
+        \addplot[cife] table [x={#2_cife_n}, y={#2_#3cife_#1_error}, col sep=comma] {errors.csv};
+        \addplot[jmi] table [x={#2_jmi_n}, y={#2_#3jmi_#1_error}, col sep=comma] {errors.csv};
+        \addplot[mim] table [x={#2_mim_n}, y={#2_#3mim_#1_error}, col sep=comma] {errors.csv};
+        \addplot[ttest] table [x={#2_t-test_overestim_var_n}, y={#2_t-test_overestim_var_#1_error}, col sep=comma] {errors.csv};
+        \addplot[wilcoxon] table [x={#2_wilcoxon_n}, y={#2_wilcoxon_#1_error}, col sep=comma] {errors.csv};
+        \addplot[logreg] table [x={#2_logreg_n}, y={#2_logreg_#1_error}, col sep=comma] {errors.csv};
+        \addplot[rfc] table [x={#2_rfc_n}, y={#2_rfc_#1_error}, col sep=comma] {errors.csv};
+      \end{axis}
+    \end{tikzpicture}%
+}
+
