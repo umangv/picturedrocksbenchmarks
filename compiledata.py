@@ -40,7 +40,7 @@ def paul():
     """
     paul = sc.datasets.paul15()
     assert np.allclose(paul.X % 1, 0)
-    paul.X = scipy.sparse.csc_matrix(paul.X.astype(int))
+    paul.X = scipy.sparse.csc_matrix(paul.X)
     pr.read.process_clusts(paul, "paul15_clusters")
     paul.write("data/paul/paul.h5ad")
     ft = pr.performance.FoldTester(paul)
