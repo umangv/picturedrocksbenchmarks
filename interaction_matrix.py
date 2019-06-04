@@ -7,6 +7,7 @@ import click
 
 from picturedrocks.markers.mutualinformation.infoset import quantile_discretize
 from getdata import getdata
+from tqdm import tqdm
 
 
 def bininfoset(adata, supervised, k=5):
@@ -33,7 +34,7 @@ def compute_interactions(adata):
     Hwrty = infoset.entropy_wrt(np.array([-1]))
     n_feats = infoset.X.shape[1]
     interaction = np.zeros((n_feats, n_feats))
-    for i in range(n_feats):
+    for i in tqdm(range(n_feats)):
         cur_row = (
             H
             + H[i]

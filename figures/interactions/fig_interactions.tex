@@ -1,0 +1,38 @@
+\documentclass[varwidth=170mm]{standalone}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\pgfplotsset{histplot/.style={ybar interval, draw=none, fill=black}}
+\pgfplotsset{histaxes/.style={area style, mark=no,
+  ylabel={Entries per unit information},
+  %xlabel={$I(x_i;x_j; y)$},
+  width=85mm, %ymode={log}, log origin=0,
+  every axis title/.style={anchor=north, at={(0.5, -.1)}}}
+}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepgfplotslibrary{colorbrewer}
+\begin{document}
+
+
+    \begin{tikzpicture}
+      \begin{axis}[histaxes,title=\textbf{Green Dataset}]
+        \addplot+[histplot] table [x=x,y=y,col sep=comma] {green_histogram.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \begin{axis}[histaxes,title=\textbf{Zeisel Dataset}]
+        \addplot+[histplot] table [x=x,y=y,col sep=comma] {zeisel_histogram.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \begin{axis}[histaxes,title=\textbf{Zheng Dataset}]
+        \addplot+[histplot] table [x=x,y=y,col sep=comma] {zheng_histogram.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \begin{axis}[histaxes,title=\textbf{Paul Dataset}]
+        \addplot+[histplot] table [x=x,y=y,col sep=comma] {paul_histogram.csv};
+      \end{axis}
+    \end{tikzpicture}
+\end{document}

@@ -80,7 +80,7 @@ cd ../..
 ### Runtimes
 Runtimes are extracted from the `markers_full` files. They can be extracted at once with
 ```bash
-python extractruntimes.py
+python extract_runtimes.py
 ```
 
 This will generate `output/runtimes.csv` and `output/runtimes2.csv`. To generate the bar plots from these csv files, run `make` inside the `figures/runtimes` directory.
@@ -101,8 +101,19 @@ python dimred.py green
 This will generate all the combinations of PCA/tSNE/UMAP and PDF/PNG plots for features selected with various methods in the `figures/dimred` directory.
 
 ### Histograms of I(x_i; x_j; y)
-(Instructions will be posted soon)
+To compute the I(x_i; x_j; y) matrices for each dataset, use `interaction_matrix.py DATASET`.
 
+```bash
+python interaction_matrix.py paul
+```
+
+To generate the images in our paper, run `make` in the `figures/interactions/` directory.
+
+```bash
+cd figures/interactions/
+make
+cd ../../
+```
 
 ## Authors
 This code was developed by Umang Varma with guidance from Anna C Gilbert. 
