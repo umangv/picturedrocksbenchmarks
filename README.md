@@ -1,6 +1,8 @@
 # PicturedRocks Benchmarking Experiments
 
-This repository contains code for all the benchmarking experiments in our paper "Information Theoretic Feature Selection Methods for Single Cell RNA Sequencing".  We intend to make all our experiments easily reproducible. To this end, we are publishing numerous scripts to generate the figures in our paper.
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/umangv/picturedrocksbenchmarks.svg)](https://cloud.docker.com/repository/docker/umangv/picturedrocksbenchmarks)
+
+This repository contains code for all the benchmarking experiments in our paper "Information Theoretic Feature Selection Methods for Single Cell RNA Sequencing".  We intend to make all our experiments easily reproducible. To this end, we are publishing numerous scripts to generate the figures in our paper. To ensure that reproducibility is not lost as other software packages are updated, we have published a [Docker Image](https://cloud.docker.com/repository/docker/umangv/picturedrocksbenchmarks) with all dependencies pre-installed (with the exception of LaTeX, which is easily available, backwards compatible, and would make the Docker image much larger).
 
 ## Download the data
 
@@ -114,6 +116,23 @@ cd figures/interactions/
 make
 cd ../../
 ```
+
+## Run Everything
+
+The `runjobs.py` script can automate a lot of these steps. To run all experiments in our paper, you may run
+```bash
+cd data
+make
+cd ..
+python compiledata.py paul zeisel zheng green
+python runjobs.py --dataset all --method all selectkfold
+python runjobs.py --dataset all --method all classifykfold
+python runjobs.py --dataset all --method all selectfull
+python intersection_table.py all
+python runjobs.py --dataset all interactions
+```
+
+You will still have to run `make` in the subdirectories under `figures/` to generate the PDF images.
 
 ## Authors
 This code was developed by Umang Varma with guidance from Anna C Gilbert. 
