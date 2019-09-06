@@ -2,7 +2,7 @@
 
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/umangv/picturedrocksbenchmarks.svg)](https://cloud.docker.com/repository/docker/umangv/picturedrocksbenchmarks)
 
-This repository contains code for all the benchmarking experiments in our paper "Information Theoretic Feature Selection Methods for Single Cell RNA Sequencing".  We intend to make all our experiments easily reproducible. To this end, we are publishing numerous scripts to generate the figures in our paper. To ensure that reproducibility is not lost as other software packages are updated, we have published a [Docker Image](https://cloud.docker.com/repository/docker/umangv/picturedrocksbenchmarks) with all dependencies pre-installed (with the exception of LaTeX, which is easily available, backwards compatible, and would make the Docker image much larger).
+This repository contains code for all the benchmarking experiments in our paper "Information Theoretic Feature Selection Methods for Single Cell RNA Sequencing".  We intend to make all our experiments easily reproducible. To this end, we are publishing numerous scripts to generate the figures in our paper. To ensure that reproducibility is not lost as other software packages are updated, we have published a [Docker Image](https://hub.docker.com/r/umangv/picturedrocksbenchmarks) with all dependencies pre-installed (with the exception of LaTeX, which is easily available, backwards compatible, and would make the Docker image much larger).
 
 ## Download the data
 
